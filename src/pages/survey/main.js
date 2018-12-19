@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 
-if (process.env.VUE_APP_PREVIEW == 'on') {
+if (process.env.VUE_APP_MOCK == 'on') {
   require('@/mock/register')
 }
 
@@ -12,7 +12,7 @@ import '@/styles/index.styl'
 import '@/plugin'
 
 import ElementUI from 'element-ui'
-Vue.use(ElementUI, { size: 'small', locale })
+Vue.use(ElementUI, { size: 'small' })
 
 Vue.config.productionTip = false
 Vue.prototype.$env__is_preview = process.env.VUE_APP_PREVIEW === 'on'
