@@ -5,10 +5,10 @@
       img(src='@/assets/logo/element.svg', style='height: 40px')
       h1.hero-title= process.env.VUE_APP_TITLE
       el-tips
-        | 小型问卷调查 Demo，包含问卷管理、调查填写页面，点击下方入口即可体验，无需账号，数据存储于浏览器本地。
-        | 需要重置数据请在本页面底部点击重置按钮。
+        | 小型问卷调查 Demo，包含问卷管理、调查填写页面，点击下方入口即可体验。
+        | 部分数据存储于浏览器本地，需要重置数据请在本页面底部点击重置按钮。
     .hero-inner
-      el-row(:gutter='10')
+      el-row(:gutter='20')
         el-col(:xs='24', :sm='12')
           entry-card(title='问卷管理', href='survey.html', :features='["💻 支持桌面端", "📵 不支持移动端", "✔️ 查看所有问卷", "✔️ 新建问卷", "✔️ 删除问卷", "✔️ 修改问卷状态", "✔️  问卷统计"]')
         el-col(:xs='24', :sm='12')
