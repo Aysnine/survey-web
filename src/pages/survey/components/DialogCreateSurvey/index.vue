@@ -16,7 +16,7 @@
                 template(v-if='item.type == "select"')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0;') 类型：
+                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0;') 选择类型：
                     el-col(:span='14')
                       div
                         el-radio(v-model='item.method', label='checkbox') 多选
@@ -24,7 +24,7 @@
                     el-col(:span='4', style='text-align: center')
                       span(style='font-size: 14px; color: #606266;') 默认：
                       el-button(type='text', @click='item.defaults = [], item.default = false') 清除
-                  el-row(:gutter='20')
+                  el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
                       span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0;') 可选项：
                     el-col(:span='14')
@@ -41,6 +41,11 @@
                           el-radio(v-for='(option, optionIndex) in item.options', :key='option.index', :label='option.index')
                         el-checkbox-group.vertical-list.no-label(v-if='item.method == "checkbox"', v-model='item.defaults')
                           el-checkbox(v-for='(option, optionIndex) in item.options', :key='option.index', :label='option.index')
+                  el-row(:gutter='20')
+                    el-col(:span='6', style='text-align: right')
+                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 填写其他：
+                    el-col(:span='6')
+                      el-checkbox(v-model='item.other') 开启“其他”选项，自行填写文字
                 template(v-if='item.type == "number"')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
