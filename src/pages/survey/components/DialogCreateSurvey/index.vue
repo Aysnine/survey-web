@@ -123,7 +123,7 @@ export default {
   name: 'DialogCreateSurvey',
   data() {
     return {
-      show: true,
+      show: false,
       form: {
         survey_title: '',
         survey_enable: 1,

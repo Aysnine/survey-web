@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import DialogCreateSurvey from './components/DialogCreateSurvey'
 
 export default {
@@ -31,10 +31,10 @@ export default {
   },
   methods: {
     ...mapActions(['fetch']),
-    handleEdit(index, row) {
+    handleEdit(/* index, row */) {
       // console.log(index, row)
     },
-    handleDelete(index, row) {
+    handleDelete(/* index, row */) {
       // console.log(index, row)
     },
     handleCreate() {
