@@ -7,7 +7,7 @@
         el-form-item(label='问卷状态', prop='survey_enable')
           el-switch(v-model='form.survey_enable', :active-value='1', :inactive-value='0', active-text='可以填写', inactive-text='不可填写')
         .survey-inner-list
-          template(v-if='form.survey_doc.questions.length', v-for='(item, index) in form.survey_doc.questions')
+          template(v-if='qss.length', v-for='(item, index) in qss')
             el-form-item(:label='"# " + (index+1) + " [" + getTypeInfo(item.type).label + "]"', :key='item.index')
               el-card(shadow='hover', :class='"flag-" + item.type')
                 div(slot='header')
@@ -22,19 +22,18 @@
                         el-radio(v-model='item.method', label='checkbox') 多选
                         el-radio(v-model='item.method', label='radio') 单选
                     el-col(:span='4', style='text-align: center')
-                      span(style='font-size: 14px; color: #606266;') 默认：
-                      el-button(type='text', @click='item.defaults = [], item.default = false') 清除
+                      el-button(type='text', @click='item.defaults = [], item.default = false') 清除默认
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
                       span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0;') 可选项：
-                    el-col(:span='14')
+                    el-col(:span='14', style='text-align: center')
                       div
                         template(v-for='(option, optionIndex) in item.options')
                           el-input(v-model='option.value', clearable, placeholder='请输入内容', style='margin-bottom: 10px')
                             template(slot='prepend') # {{ optionIndex + 1 }}
                             template(slot='append')
                               el-button(icon='el-icon-delete', @click='handleItemRemoveOption(optionIndex, option, item.options)')
-                        el-button(type='primary', plain, icon='el-icon-plus', @click='item.options.push({ value: "", index: counter++ })') 添加可选项
+                        el-button(type='text', icon='el-icon-plus', @click='item.options.push({ value: "", index: counter++ })') 添加可选项
                     el-col(:span='4', style='text-align: center')
                       div
                         el-radio-group.vertical-list.no-label(v-if='item.method == "radio"', v-model='item.default')
@@ -89,17 +88,21 @@
                       el-button(type='text', @click='item.default = false') 关闭
                 .footer
                   el-row
-                    el-col(:span='12')
+                    el-col(:span='4')
                       div
                         el-checkbox(v-model='item.required') 必填
-                    el-col(:span='12', style='text-align: right')
+                    el-col(:span='12')
+                      div
+                        span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 关联：
+                        el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='请选择所依赖的题项', clearable)
+                    el-col(:span='8', style='text-align: right')
                       el-tooltip.item(effect='light', content='删除', placement='bottom-end')
                         el-button(type='danger', icon='el-icon-delete', circle, plain, @click='handleRemoveQuestion(index, item)')
                       el-tooltip.item(effect='light', content='上移', placement='bottom-end')
                         el-button(icon='el-icon-arrow-up', type='primary', circle, plain, @click='handleMoveUp(index, item)')
                       el-tooltip.item(effect='light', content='下移', placement='bottom-end')
                         el-button(icon='el-icon-arrow-down', type='primary', circle, plain, @click='handleMoveDown(index, item)')
-          template(v-if='!form.survey_doc.questions.length')
+          template(v-if='!qss.length')
             p(style='text-align: center; color: #c0c4cc; padding: 2em 1em;')
               i.el-icon-info
               |  暂无问卷内容，请点击下方按钮添加
@@ -123,7 +126,7 @@ export default {
   name: 'DialogCreateSurvey',
   data() {
     return {
-      show: false,
+      show: true,
       form: {
         survey_title: '',
         survey_enable: 1,
@@ -138,6 +141,7 @@ export default {
         ]
       },
       counter: 1,
+      focusQsIndex: 0,
       options: {
         type: [
           {
@@ -149,6 +153,7 @@ export default {
             ],
             gen: index => ({
               index,
+              link: [],
               title: '',
               tips: '',
               type: 'select',
@@ -165,6 +170,7 @@ export default {
             value: 'number',
             gen: index => ({
               index,
+              link: [],
               title: '',
               tips: '',
               type: 'number',
@@ -179,6 +185,7 @@ export default {
             value: 'text',
             gen: index => ({
               index,
+              link: [],
               title: '',
               tips: '',
               type: 'text',
@@ -196,6 +203,36 @@ export default {
   computed: {
     typeInfo() {
       return this.options.type.find(i => i.value == this.select)
+    },
+    qss() {
+      return this.form.survey_doc.questions
+    },
+    qssTree() {
+      return this.qss
+        .filter(i => i.options && i.index !== this.focusQsIndex)
+        .map(({ /*  title, */ index, options }) => ({
+          label:
+            '#' + (this.mapIndex.find(i => i.index === index).i + 1) + ' 题',
+          value: index,
+          children: options.map(({ index }) => ({
+            label:
+              '#' + (this.mapIndex.find(i => i.index === index).i + 1) + ' 项',
+            value: index
+          }))
+        }))
+    },
+    mapIndex() {
+      return this.qss
+        .map((item, index) => [
+          { index: item.index, i: index },
+          ...(item.options && item.options.length
+            ? item.options.map((item, index) => ({
+                index: item.index,
+                i: index
+              }))
+            : [])
+        ])
+        .reduce((x, i) => x.concat(i), [])
     }
   },
   watch: {
@@ -222,17 +259,21 @@ export default {
       }
       this.resetForm()
     },
-    handleAddQuestion() {
-      this.form.survey_doc.questions.push(this.typeInfo.gen(this.counter++))
+    removeIndex(type, index) {
+      this.$log('Remove counter index', type, index)
     },
-    handleRemoveQuestion(index /* , item */) {
+    handleAddQuestion() {
+      this.qss.push(this.typeInfo.gen(this.counter++))
+    },
+    handleRemoveQuestion(index, item) {
       this.$confirm('是否移除此问题?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.form.survey_doc.questions.splice(index, 1)
+          this.removeIndex('question', item.index)
+          this.qss.splice(index, 1)
         })
         .catch(() => {
           // ...
@@ -240,24 +281,21 @@ export default {
     },
     handleItemRemoveOption(optionIndex, option, options) {
       if (options.length > 1) {
+        this.removeIndex('question/select/option', option.index)
         options.splice(optionIndex, 1)
       } else {
         this.$message.warning('至少包含一个可选项')
       }
     },
     handleMoveUp(index /* , item */) {
-      if (index <= 0 || this.form.survey_doc.questions.length < 2) return
-      let x = this.form.survey_doc.questions.splice(index, 1)
-      this.form.survey_doc.questions.splice(index - 1, 0, x[0])
+      if (index <= 0 || this.qss.length < 2) return
+      let x = this.qss.splice(index, 1)
+      this.qss.splice(index - 1, 0, x[0])
     },
     handleMoveDown(index /* , item */) {
-      if (
-        index >= this.form.survey_doc.questions.length ||
-        this.form.survey_doc.questions.length < 2
-      )
-        return
-      let x = this.form.survey_doc.questions.splice(index, 1)
-      this.form.survey_doc.questions.splice(index + 1, 0, x[0])
+      if (index >= this.qss.length || this.qss.length < 2) return
+      let x = this.qss.splice(index, 1)
+      this.qss.splice(index + 1, 0, x[0])
     },
     getTypeInfo(value) {
       return this.options.type.find(i => i.value == value)
