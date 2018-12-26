@@ -16,7 +16,7 @@
                 template(v-if='item.type == "select"')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0;') 选择类型：
+                      span.inner-label 选择类型：
                     el-col(:span='14')
                       div
                         el-radio(v-model='item.method', label='checkbox') 多选
@@ -25,7 +25,7 @@
                       el-button(type='text', @click='item.defaults = [], item.default = false') 清除默认
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0;') 可选项：
+                      span.inner-label 可选项：
                     el-col(:span='14', style='text-align: center')
                       div
                         template(v-for='(option, optionIndex) in item.options')
@@ -42,14 +42,14 @@
                           el-checkbox(v-for='(option, optionIndex) in item.options', :key='option.index', :label='option.index')
                   el-row(:gutter='20')
                     el-col(:span='6', style='text-align: right')
-                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 填写其他：
+                      span.inner-label 填写其他：
                     el-col(:span='6')
                       el-checkbox(v-model='item.other') 开启“其他”选项，自行填写文字
                 template(v-if='item.type == "number"')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
                       el-tooltip.item(effect='light', content='支持 -999999999 到 999999999 的整数', placement='top')
-                        span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 数字区间：
+                        span.inner-label 数字区间：
                     el-col(:span='8')
                       el-input-number(v-model='item.minNumber', :min='-999999999', :max='999999999', style='width: 100%')
                     el-col(:span='2', style='text-align: center; font-weight: bold;')
@@ -58,7 +58,7 @@
                       el-input-number(v-model='item.maxNumber', :min='-999999999', :max='999999999', style='width: 100%')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 默认填写：
+                      span.inner-label 默认填写：
                     el-col(v-if='item.default === false', :span='6')
                       el-button(type='text', @click='item.default = true') 暂未启用，点击启用
                     el-col(v-if='item.default !== false', :span='8')
@@ -69,7 +69,7 @@
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
                       el-tooltip.item(effect='light', content='支持 5000 字以内', placement='top')
-                        span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 文字长度：
+                        span.inner-label 文字长度：
                     el-col(:span='8')
                       el-input-number(v-model='item.minLength', :min='0', :max='5000', style='width: 100%')
                     el-col(:span='2', style='text-align: center; font-weight: bold;')
@@ -78,7 +78,7 @@
                       el-input-number(v-model='item.maxLength', :min='0', :max='5000', style='width: 100%')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 默认填写：
+                      span.inner-label 默认填写：
                     el-col(v-if='item.default === false', :span='6')
                       el-button(type='text', @click='item.default = ""') 暂未启用，点击启用
                     el-col(v-if='item.default !== false', :span='14')
@@ -93,8 +93,8 @@
                         el-checkbox(v-model='item.required') 必填
                     el-col(:span='12')
                       div
-                        span(style='font-size: 14px; color: #606266; padding: 0 12px 0 0; cursor: pointer') 关联：
-                        el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='请选择所依赖的题项', clearable)
+                        span.inner-label 关联：
+                        el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='请选择所依赖的题项', clearable, )
                     el-col(:span='8', style='text-align: right')
                       el-tooltip.item(effect='light', content='删除', placement='bottom-end')
                         el-button(type='danger', icon='el-icon-delete', circle, plain, @click='handleRemoveQuestion(index, item)')
@@ -344,6 +344,12 @@ export default {
       display block
       margin-left 0
       margin-bottom 10px
+  .inner-label
+    font-size 14px
+    // color #606266
+    color #c0c4cc
+    padding 0 12px 0 0
+    cursor pointer
   .footer
     border-top 1px solid #ebeef5
     padding-top 1em
