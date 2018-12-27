@@ -16,7 +16,7 @@
                 template(v-if='item.type == "select"')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span.inner-label 选择类型：
+                      span.inner-label 类型：
                     el-col(:span='14')
                       div
                         el-radio(v-model='item.method', label='checkbox') 多选
@@ -25,7 +25,7 @@
                       el-button(type='text', @click='item.defaults = [], item.default = false') 清除默认
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span.inner-label 可选项：
+                      span.inner-label 选项：
                     el-col(:span='14', style='text-align: center')
                       div
                         template(v-for='(option, optionIndex) in item.options')
@@ -33,7 +33,7 @@
                             template(slot='prepend') # {{ optionIndex + 1 }}
                             template(slot='append')
                               el-button(icon='el-icon-delete', @click='handleItemRemoveOption(optionIndex, option, item.options)')
-                        el-button(type='text', icon='el-icon-plus', @click='item.options.push({ value: "", index: counter++ })') 添加可选项
+                        el-button(type='text', icon='el-icon-plus', @click='item.options.push({ value: "", index: counter++ })') 添加项
                     el-col(:span='4', style='text-align: center')
                       div
                         el-radio-group.vertical-list.no-label(v-if='item.method == "radio"', v-model='item.default')
@@ -42,14 +42,14 @@
                           el-checkbox(v-for='(option, optionIndex) in item.options', :key='option.index', :label='option.index')
                   el-row(:gutter='20')
                     el-col(:span='6', style='text-align: right')
-                      span.inner-label 填写其他：
+                      span.inner-label 其他：
                     el-col(:span='6')
-                      el-checkbox(v-model='item.other') 开启“其他”选项，自行填写文字
+                      el-checkbox(v-model='item.other') 允许自行填写
                 template(v-if='item.type == "number"')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
                       el-tooltip.item(effect='light', content='支持 -999999999 到 999999999 的整数', placement='top')
-                        span.inner-label 数字区间：
+                        span.inner-label 区间：
                     el-col(:span='8')
                       el-input-number(v-model='item.minNumber', :min='-999999999', :max='999999999', style='width: 100%')
                     el-col(:span='2', style='text-align: center; font-weight: bold;')
@@ -58,7 +58,7 @@
                       el-input-number(v-model='item.maxNumber', :min='-999999999', :max='999999999', style='width: 100%')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span.inner-label 默认填写：
+                      span.inner-label 默认：
                     el-col(v-if='item.default === false', :span='6')
                       el-button(type='text', @click='item.default = true') 暂未启用，点击启用
                     el-col(v-if='item.default !== false', :span='8')
@@ -69,7 +69,7 @@
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
                       el-tooltip.item(effect='light', content='支持 5000 字以内', placement='top')
-                        span.inner-label 文字长度：
+                        span.inner-label 长度：
                     el-col(:span='8')
                       el-input-number(v-model='item.minLength', :min='0', :max='5000', style='width: 100%')
                     el-col(:span='2', style='text-align: center; font-weight: bold;')
@@ -78,12 +78,12 @@
                       el-input-number(v-model='item.maxLength', :min='0', :max='5000', style='width: 100%')
                   el-row(:gutter='20', style='margin-bottom: 1em')
                     el-col(:span='6', style='text-align: right')
-                      span.inner-label 默认填写：
+                      span.inner-label 默认：
                     el-col(v-if='item.default === false', :span='6')
                       el-button(type='text', @click='item.default = ""') 暂未启用，点击启用
                     el-col(v-if='item.default !== false', :span='14')
                       div
-                        el-input(type='textarea', clearable, autosize, placeholder='请输入问题描述或提示信息', v-model='item.default', :min='item.minLength', :max='item.maxLength')
+                        el-input(type='textarea', clearable, autosize, placeholder='请输入默认内容', v-model='item.default', :min='item.minLength', :max='item.maxLength')
                     el-col(v-if='item.default !== false', :span='4')
                       el-button(type='text', @click='item.default = false') 关闭
                 .footer
@@ -93,8 +93,9 @@
                         el-checkbox(v-model='item.required') 必填
                     el-col(:span='12')
                       div
-                        span.inner-label 关联：
-                        el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='请选择所依赖的题项', clearable, )
+                        //- el-tooltip.item(effect='light', :disabled='item.link && item.link.length > 0', content='当该题需要问卷填写者勾选了其他题的项才出现时，可在此设定关联条件', placement='bottom')
+                          el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='关联条件', clearable)
+                        el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='关联条件', clearable)
                     el-col(:span='8', style='text-align: right')
                       el-tooltip.item(effect='light', content='删除', placement='bottom-end')
                         el-button(type='danger', icon='el-icon-delete', circle, plain, @click='handleRemoveQuestion(index, item)')
@@ -208,18 +209,25 @@ export default {
       return this.form.survey_doc.questions
     },
     qssTree() {
-      return this.qss
-        .filter(i => i.options && i.index !== this.focusQsIndex)
-        .map(({ /*  title, */ index, options }) => ({
+      return this.qss.map(({ title, index, options }) => ({
+        label:
+          '#' +
+          (this.mapIndex.find(i => i.index === index).i + 1) +
+          ' 题 ' +
+          title.slice(0, 7) +
+          '...',
+        value: index,
+        children: options.map(({ index, value }) => ({
           label:
-            '#' + (this.mapIndex.find(i => i.index === index).i + 1) + ' 题',
-          value: index,
-          children: options.map(({ index }) => ({
-            label:
-              '#' + (this.mapIndex.find(i => i.index === index).i + 1) + ' 项',
-            value: index
-          }))
-        }))
+            '#' +
+            (this.mapIndex.find(i => i.index === index).i + 1) +
+            ' 项 ' +
+            value.slice(0, 7) +
+            '...',
+          value: index
+        })),
+        disabled: options && index === this.focusQsIndex
+      }))
     },
     mapIndex() {
       return this.qss
@@ -281,8 +289,40 @@ export default {
     },
     handleItemRemoveOption(optionIndex, option, options) {
       if (options.length > 1) {
-        this.removeIndex('question/select/option', option.index)
-        options.splice(optionIndex, 1)
+        let linked = this.form.survey_doc.questions.filter(i =>
+          i.link.find(i => i === option.index)
+        )
+        if (linked.length) {
+          this.$confirm(
+            '该选项已被' +
+              linked
+                .map(
+                  item =>
+                    '【# ' +
+                    (this.mapIndex.find(i => i.index === item.index).i + 1) +
+                    ' 题】'
+                )
+                .join('、') +
+              '关联，是否强制移除?',
+            '提示',
+            {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }
+          )
+            .then(() => {
+              this.removeIndex('question/select/option', option.index)
+              options.splice(optionIndex, 1)
+              linked.map(i => (i.link = []))
+            })
+            .catch(() => {
+              // ...
+            })
+        } else {
+          this.removeIndex('question/select/option', option.index)
+          options.splice(optionIndex, 1)
+        }
       } else {
         this.$message.warning('至少包含一个可选项')
       }
