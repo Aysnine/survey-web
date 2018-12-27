@@ -209,25 +209,27 @@ export default {
       return this.form.survey_doc.questions
     },
     qssTree() {
-      return this.qss.map(({ title, index, options }) => ({
-        label:
-          '#' +
-          (this.mapIndex.find(i => i.index === index).i + 1) +
-          ' 题 ' +
-          title.slice(0, 7) +
-          '...',
-        value: index,
-        children: options.map(({ index, value }) => ({
+      return this.qss
+        .filter(i => i.options)
+        .map(({ title, index, options }) => ({
           label:
             '#' +
             (this.mapIndex.find(i => i.index === index).i + 1) +
-            ' 项 ' +
-            value.slice(0, 7) +
+            ' 题 ' +
+            title.slice(0, 7) +
             '...',
-          value: index
-        })),
-        disabled: options && index === this.focusQsIndex
-      }))
+          value: index,
+          children: options.map(({ index, value }) => ({
+            label:
+              '#' +
+              (this.mapIndex.find(i => i.index === index).i + 1) +
+              ' 项 ' +
+              value.slice(0, 7) +
+              '...',
+            value: index
+          })),
+          disabled: options && index === this.focusQsIndex
+        }))
     },
     mapIndex() {
       return this.qss
