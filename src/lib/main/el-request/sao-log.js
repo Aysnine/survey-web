@@ -66,7 +66,7 @@ export default function (req, res) {
     console.log('📜 Headers', res.config.headers)
     console.log('📜 Params', qs.parse(res.config.params))
     if (res.config.data)
-      console.log('📜 Body', qs.parse(res.config.data))
+      console.log('📜 Body', typeof res.config.data === 'string' ? JSON.parse(res.config.data) : qs.parse(res.config.data))
     console.groupEnd()
   }
   console.group('🍓 Response')
