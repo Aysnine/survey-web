@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Loading } from 'element-ui'
 import log from './sao-log.js'
 
 const service = axios.create({
@@ -7,8 +8,15 @@ const service = axios.create({
 })
 
 const smoothness = 600
-const startLoading = () => {}
-const StopLoading = () => null
+const startLoading = () =>
+  Loading.service({
+    fullscreen: true,
+    lock: false,
+    text: '请稍后 _(:3」∠)_ 。。。',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)'
+  })
+const StopLoading = instance => (instance.close(), null)
 
 const { push, pop } = (function() {
   let count = 0

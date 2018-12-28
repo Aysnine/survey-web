@@ -1,7 +1,7 @@
 <template lang="pug">
-  el-dialog(title='新建问卷', :visible.sync='show', fullscreen)
+  el-dialog(title='新建问卷', :visible.sync='show', fullscreen, custom-class='tite-dialog')
     el-card(shadow='never', style='height: calc(100vh - 120px); overflow-y: scroll;')
-      el-form.hero-form(:model='form', :rules='rules', ref='form', label-suffix='：', label-width='140px')
+      el-form.hero-wrap(:model='form', :rules='rules', ref='form', label-suffix='：', label-width='140px')
         el-form-item(label='问卷名称', prop='survey_title')
           el-input(v-model='form.survey_title', placeholder='请输入问卷名称', clearable)
         el-form-item(label='问卷状态', prop='survey_enable')
@@ -11,10 +11,10 @@
             el-form-item(:label='"# " + (index+1) + " [" + getTypeInfo(item.type).label + "]"', :key='item.index')
               el-card(shadow='hover', :class='"flag-" + item.type')
                 div(slot='header')
-                  el-input(v-model='item.title', clearable, placeholder='请输入问题', style='margin-bottom: 1em')
-                  el-input(type='textarea', clearable, autosize, placeholder='请输入问题描述或提示信息', v-model='item.tips')
+                  el-input(v-model='item.title', clearable, placeholder='请输入问题')
+                  el-input.fix--mt(type='textarea', clearable, autosize, placeholder='请输入问题描述或提示信息', v-model='item.tips')
                 template(v-if='item.type == "select"')
-                  el-row(:gutter='20', style='margin-bottom: 1em')
+                  el-row.fix--mt(:gutter='20')
                     el-col(:span='6', style='text-align: right')
                       span.inner-label 类型：
                     el-col(:span='14')
@@ -23,7 +23,7 @@
                         el-radio(v-model='item.method', label='radio') 单选
                     el-col(:span='4', style='text-align: center')
                       el-button(type='text', @click='item.defaults = [], item.default = false') 清除默认
-                  el-row(:gutter='20', style='margin-bottom: 1em')
+                  el-row.fix--mt(:gutter='20')
                     el-col(:span='6', style='text-align: right')
                       span.inner-label 选项：
                     el-col(:span='14', style='text-align: center')
@@ -46,7 +46,7 @@
                     el-col(:span='6')
                       el-checkbox(v-model='item.other') 允许自行填写
                 template(v-if='item.type == "number"')
-                  el-row(:gutter='20', style='margin-bottom: 1em')
+                  el-row.fix--mt(:gutter='20')
                     el-col(:span='6', style='text-align: right')
                       el-tooltip.item(effect='light', content='支持 -999999999 到 999999999 的整数', placement='top')
                         span.inner-label 区间：
@@ -56,7 +56,7 @@
                       span ~
                     el-col(:span='8')
                       el-input-number(v-model='item.maxNumber', :min='-999999999', :max='999999999', style='width: 100%')
-                  el-row(:gutter='20', style='margin-bottom: 1em')
+                  el-row.fix--mt(:gutter='20')
                     el-col(:span='6', style='text-align: right')
                       span.inner-label 默认：
                     el-col(v-if='item.default === false', :span='6')
@@ -66,7 +66,7 @@
                     el-col(v-if='item.default !== false', :span='10')
                       el-button(type='text', @click='item.default = false') 关闭
                 template(v-if='item.type == "text"')
-                  el-row(:gutter='20', style='margin-bottom: 1em')
+                  el-row.fix--mt(:gutter='20')
                     el-col(:span='6', style='text-align: right')
                       el-tooltip.item(effect='light', content='支持 5000 字以内', placement='top')
                         span.inner-label 长度：
@@ -76,7 +76,7 @@
                       span ~
                     el-col(:span='8')
                       el-input-number(v-model='item.maxLength', :min='0', :max='5000', style='width: 100%')
-                  el-row(:gutter='20', style='margin-bottom: 1em')
+                  el-row.fix--mt(:gutter='20')
                     el-col(:span='6', style='text-align: right')
                       span.inner-label 默认：
                     el-col(v-if='item.default === false', :span='6')
@@ -88,15 +88,12 @@
                       el-button(type='text', @click='item.default = false') 关闭
                 .footer
                   el-row
-                    el-col(:span='4')
+                    el-col(:span='3')
                       div
                         el-checkbox(v-model='item.required') 必填
-                    el-col(:span='12')
-                      div
-                        //- el-tooltip.item(effect='light', :disabled='item.link && item.link.length > 0', content='当该题需要问卷填写者勾选了其他题的项才出现时，可在此设定关联条件', placement='bottom')
-                          el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='关联条件', clearable)
-                        el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='关联条件', clearable)
-                    el-col(:span='8', style='text-align: right')
+                    el-col(:span='14')
+                      el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='关联条件', clearable, style='width: 100%')
+                    el-col(:span='7', style='text-align: right')
                       el-tooltip.item(effect='light', content='删除', placement='bottom-end')
                         el-button(type='danger', icon='el-icon-delete', circle, plain, @click='handleRemoveQuestion(index, item)')
                       el-tooltip.item(effect='light', content='上移', placement='bottom-end')
@@ -118,16 +115,20 @@
                         i.el-icon-star-on(:class='"flag-color-" + item.value')
                 el-col(:span='10')
                   el-button(type='primary', plain, icon='el-icon-plus', style='width: 100%', @click='handleAddQuestion') 添加问题
-        el-form-item(label-width='0', style='text-align: right')
+    .hero-wrap(style='')
+      el-row(style='margin-top: 1em')
+        el-col(:span='24', style='text-align: right; padding: 0 .5em')
           el-button(type='primary', @click='submitForm("form")') 已完成
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'DialogCreateSurvey',
   data() {
     return {
-      show: true,
+      show: false,
       form: {
         survey_title: '',
         survey_enable: 1,
@@ -251,6 +252,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['createSurvey']),
     open() {
       if (!this.show) this.show = true
     },
@@ -343,9 +345,15 @@ export default {
       return this.options.type.find(i => i.value == value)
     },
     submitForm() {
-      this.$refs['form'].validate(valid => {
+      this.$refs['form'].validate(async valid => {
         if (valid) {
-          alert('submit!')
+          try {
+            let rst = await this.createSurvey(this.form)
+            this.close()
+            this.$message.success(rst.msg)
+          } catch (error) {
+            this.$message.error(error.msg)
+          }
         } else {
           // console.log('error submit!!')
           return false
@@ -360,15 +368,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.hero-form
+.hero-wrap
   position relative
   margin auto
   max-width 760px
+  .fix--mt
+    margin-top .5em
   .survey-inner-list
     padding 2em 0
     margin 1em 0
     border-top 1px solid
-    border-bottom 1px solid
     border-color #dcdfe6
     .el-form-item__label
       padding-top 20px
@@ -388,7 +397,6 @@ export default {
       margin-bottom 10px
   .inner-label
     font-size 14px
-    // color #606266
     color #c0c4cc
     padding 0 12px 0 0
     cursor pointer

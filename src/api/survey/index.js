@@ -6,3 +6,15 @@ export function fetchSurveyList() {
     url: 'fetchSurveyList'
   })
 }
+
+export function createSurvey({ survey_title, survey_doc, survey_enable }) {
+  return request({
+    method: 'post',
+    url: 'createSurvey',
+    data: {
+      survey_title,
+      survey_enable,
+      survey_doc: JSON.stringify(survey_doc)
+    }
+  })
+}
