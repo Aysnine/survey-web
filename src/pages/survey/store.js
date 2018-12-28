@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchSurveyList, createSurvey, updateSurveyEnable, updateSurveyTitle } from '@/api/survey'
+import {
+  fetchSurveyList,
+  createSurvey,
+  updateSurveyEnable,
+  updateSurveyTitle
+} from '@/api/survey'
 
 Vue.use(Vuex)
 

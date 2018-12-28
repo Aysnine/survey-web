@@ -65,7 +65,10 @@ export default {
     async handleSurveyTitleChange(index, row) {
       let { survey_id, survey_title__edit_temp } = row
       try {
-        await this.updateSurveyTitle({ survey_id, survey_title: survey_title__edit_temp })
+        await this.updateSurveyTitle({
+          survey_id,
+          survey_title: survey_title__edit_temp
+        })
         row.survey_title__edit = false
         row.survey_title = survey_title__edit_temp
       } catch (error) {
