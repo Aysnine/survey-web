@@ -35,5 +35,21 @@ export default [
           .write().survey_id
       }
     }
+  },
+  {
+    path: /updateSurveyEnable.*/,
+    method: 'post',
+    handle({ db, body }) {
+      let { survey_id, survey_enable } = body
+      return {
+        code: 0,
+        msg: '设置成功',
+        data: db
+          .get('survey')
+          .find({ survey_id })
+          .assign({ survey_enable })
+          .write().survey_id
+      }
+    }
   }
 ]

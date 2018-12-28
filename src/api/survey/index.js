@@ -18,3 +18,14 @@ export function createSurvey({ survey_title, survey_doc, survey_enable }) {
     }
   })
 }
+
+export function updateSurveyEnable({ survey_id, survey_enable }) {
+  return request({
+    method: 'post',
+    url: 'updateSurveyEnable',
+    data: {
+      survey_id,
+      survey_enable
+    }
+  })
+}

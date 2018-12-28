@@ -6,6 +6,8 @@
         el-table-column(label='#', type='index')
         el-table-column(label='问卷名称', prop='survey_title')
         el-table-column(label='问卷状态', prop='survey_enable')
+          template(slot-scope='scope')
+            el-switch(v-model='scope.row.survey_enable', :inactive-value='0', :active-value='1', @change='handleSurveyEnableChange(scope.$index, scope.row)')
         el-table-column(label='创建时间', prop='survey_create_datetime')
         el-table-column(align='right')
           template(slot='header', slot-scope='scope')
@@ -31,7 +33,7 @@ export default {
     ...mapState(['survey'])
   },
   methods: {
-    ...mapActions(['fetch']),
+    ...mapActions(['fetch', 'updateSurveyEnable']),
     handleEdit(/* index, row */) {
       // console.log(index, row)
     },
@@ -40,6 +42,16 @@ export default {
     },
     handleCreate() {
       this.$refs['dialog-create-survey'].open()
+    },
+    async handleSurveyEnableChange(index, row) {
+      let { survey_id, survey_enable } = row
+      try {
+        let rst = await this.updateSurveyEnable({ survey_id, survey_enable })
+        this.$message.success(rst.msg)
+      } catch (error) {
+        row.survey_enable = !row.survey_enable + 0
+        this.$message.error(error.msg)
+      }
     }
   },
   components: {

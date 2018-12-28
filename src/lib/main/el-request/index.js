@@ -3,7 +3,7 @@ import { Loading } from 'element-ui'
 import log from './sao-log.js'
 
 const service = axios.create({
-  baseURL: process.env.VUE_APP_API,
+  baseURL: process.env.VUE_APP_API || '/',
   timeout: 1000 * 5
 })
 

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchSurveyList, createSurvey } from '@/api/survey'
+import { fetchSurveyList, createSurvey, updateSurveyEnable } from '@/api/survey'
 
 Vue.use(Vuex)
 
@@ -34,6 +34,14 @@ export default new Vuex.Store({
       try {
         let rst = await createSurvey(form)
         dispatch('fetch')
+        return rst
+      } catch (error) {
+        throw error
+      }
+    },
+    async updateSurveyEnable(_, form) {
+      try {
+        let rst = await updateSurveyEnable(form)
         return rst
       } catch (error) {
         throw error
