@@ -5,6 +5,14 @@
         el-table-column(type='selection', width='40')
         el-table-column(label='#', type='index')
         el-table-column(label='问卷名称', prop='survey_title')
+          template(slot-scope='scope')
+            template(v-if='scope.row.survey_title__edit')
+              el-input(placeholder='请输入内容', v-model='scope.row.survey_title__edit_temp', clearable, style='width: 70%; margin-right: .5em')
+              el-button(type='text', icon='el-icon-check', @click='handleSurveyTitleChange(scope.$index, scope.row)')
+              el-button(type='text', icon='el-icon-close', @click='scope.row.survey_title__edit = false')
+            template(v-else)
+              span(style='margin-right: .5em') {{ scope.row.survey_title }}
+              el-button(type='text', icon='el-icon-edit', @click='scope.row.survey_title__edit = true, scope.row.survey_title__edit_temp = scope.row.survey_title')
         el-table-column(label='问卷状态', prop='survey_enable')
           template(slot-scope='scope')
             el-switch(v-model='scope.row.survey_enable', :inactive-value='0', :active-value='1', @change='handleSurveyEnableChange(scope.$index, scope.row)')
@@ -33,7 +41,7 @@ export default {
     ...mapState(['survey'])
   },
   methods: {
-    ...mapActions(['fetch', 'updateSurveyEnable']),
+    ...mapActions(['fetch', 'updateSurveyEnable', 'updateSurveyTitle']),
     handleEdit(/* index, row */) {
       // console.log(index, row)
     },
@@ -46,10 +54,21 @@ export default {
     async handleSurveyEnableChange(index, row) {
       let { survey_id, survey_enable } = row
       try {
-        let rst = await this.updateSurveyEnable({ survey_id, survey_enable })
-        this.$message.success(rst.msg)
+        await this.updateSurveyEnable({ survey_id, survey_enable })
+        // let rst = await this.updateSurveyEnable({ survey_id, survey_enable })
+        // this.$message.success(rst.msg)
       } catch (error) {
         row.survey_enable = !row.survey_enable + 0
+        this.$message.error(error.msg)
+      }
+    },
+    async handleSurveyTitleChange(index, row) {
+      let { survey_id, survey_title__edit_temp } = row
+      try {
+        await this.updateSurveyTitle({ survey_id, survey_title: survey_title__edit_temp })
+        row.survey_title__edit = false
+        row.survey_title = survey_title__edit_temp
+      } catch (error) {
         this.$message.error(error.msg)
       }
     }

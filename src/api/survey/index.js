@@ -29,3 +29,14 @@ export function updateSurveyEnable({ survey_id, survey_enable }) {
     }
   })
 }
+
+export function updateSurveyTitle({ survey_id, survey_title }) {
+  return request({
+    method: 'post',
+    url: 'updateSurveyTitle',
+    data: {
+      survey_id,
+      survey_title
+    }
+  })
+}

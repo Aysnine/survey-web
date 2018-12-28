@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchSurveyList, createSurvey, updateSurveyEnable } from '@/api/survey'
+import { fetchSurveyList, createSurvey, updateSurveyEnable, updateSurveyTitle } from '@/api/survey'
 
 Vue.use(Vuex)
 
@@ -10,6 +10,10 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_SURVEY_LIST(state, v) {
+      v.map(i => {
+        i.survey_title__edit_temp = ''
+        i.survey_title__edit = false
+      })
       state.survey = v
     }
   },
@@ -42,6 +46,14 @@ export default new Vuex.Store({
     async updateSurveyEnable(_, form) {
       try {
         let rst = await updateSurveyEnable(form)
+        return rst
+      } catch (error) {
+        throw error
+      }
+    },
+    async updateSurveyTitle(_, form) {
+      try {
+        let rst = await updateSurveyTitle(form)
         return rst
       } catch (error) {
         throw error
