@@ -14,7 +14,7 @@ const startLoading = () =>
     lock: false,
     text: '请稍后 _(:3」∠)_ 。。。',
     spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)'
+    background: 'rgba(255, 255, 255, 0.3)'
   })
 const StopLoading = instance => (instance.close(), null)
 
