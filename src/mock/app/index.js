@@ -67,5 +67,19 @@ export default [
           .write().survey_id
       }
     }
+  },
+  {
+    path: /deleteSurvey.*/,
+    method: 'post',
+    handle({ db, body }) {
+      let list = body
+      db.get('survey')
+        .remove(({ survey_id }) => list.indexOf(survey_id) > -1)
+        .write()
+      return {
+        code: 0,
+        msg: '删除成功'
+      }
+    }
   }
 ]

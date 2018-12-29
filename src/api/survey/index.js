@@ -40,3 +40,11 @@ export function updateSurveyTitle({ survey_id, survey_title }) {
     }
   })
 }
+
+export function deleteSurvey(ids) {
+  return request({
+    method: 'post',
+    url: 'deleteSurvey',
+    data: ids
+  })
+}

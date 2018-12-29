@@ -4,7 +4,8 @@ import {
   fetchSurveyList,
   createSurvey,
   updateSurveyEnable,
-  updateSurveyTitle
+  updateSurveyTitle,
+  deleteSurvey
 } from '@/api/survey'
 
 Vue.use(Vuex)
@@ -59,6 +60,15 @@ export default new Vuex.Store({
     async updateSurveyTitle(_, form) {
       try {
         let rst = await updateSurveyTitle(form)
+        return rst
+      } catch (error) {
+        throw error
+      }
+    },
+    async deleteSurvey({ dispatch }, ids) {
+      try {
+        let rst = await deleteSurvey(ids)
+        dispatch('fetch')
         return rst
       } catch (error) {
         throw error
