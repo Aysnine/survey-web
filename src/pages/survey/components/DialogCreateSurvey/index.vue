@@ -118,7 +118,7 @@
     .hero-wrap(style='')
       el-row(style='margin-top: 1em')
         el-col(:span='24', style='text-align: right; padding: 0 .5em')
-          el-button(type='primary', @click='submitForm("form")') 已完成
+          el-button(type='primary', @click='submitForm("form")') 保存
 </template>
 
 <script>
