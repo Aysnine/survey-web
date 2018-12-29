@@ -3,7 +3,7 @@
     el-card(shadow='never', style='height: calc(100vh - 120px); overflow-y: scroll;')
       el-form.hero-wrap(:model='form', :rules='rules', ref='form', label-suffix='：', label-width='140px')
         el-form-item(label='问卷名称', prop='survey_title')
-          el-input(v-model='form.survey_title', placeholder='请输入问卷名称', clearable)
+          el-input(v-model='form.survey_title', placeholder='请输入问卷名称', clearable, autofocus)
         el-form-item(label='问卷状态', prop='survey_enable')
           el-switch(v-model='form.survey_enable', :active-value='1', :inactive-value='0', active-text='可以填写', inactive-text='不可填写')
         .survey-inner-list
