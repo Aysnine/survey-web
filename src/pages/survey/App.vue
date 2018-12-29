@@ -28,14 +28,16 @@
           //- template(slot='header', slot-scope='scope')
           //-   el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建
           template(slot-scope='scope')
-            el-button(type='primary', plain, icon='el-icon-tickets', size='mini', @click='handleEdit(scope.$index, scope.row)') 查看
+            el-button(type='primary', plain, icon='el-icon-tickets', size='mini', @click='handleDetail(scope.$index, scope.row)') 查看
             el-button.fix--1px(type='danger', plain, icon='el-icon-delete', size='mini', @click='handleDelete(scope.$index, scope.row)') 删除
     dialog-create-survey(ref='dialog-create-survey')
+    dialog-detail-survey(ref='dialog-detail-survey')
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import DialogCreateSurvey from './components/DialogCreateSurvey'
+import DialogDetailSurvey from './components/DialogDetailSurvey'
 
 export default {
   mounted() {
@@ -59,8 +61,11 @@ export default {
     handleSelectionChange(val) {
       this.selection = val
     },
-    handleEdit(/* index, row */) {
-      // console.log(index, row)
+    handleDetail(index, row) {
+      this.$refs['dialog-detail-survey'].open(row)
+    },
+    handleCreate() {
+      this.$refs['dialog-create-survey'].open()
     },
     handleDelete(index, row) {
       this.$confirm('是否删除此问卷?', '提示', {
@@ -87,9 +92,6 @@ export default {
         .catch(() => {
           // ...
         })
-    },
-    handleCreate() {
-      this.$refs['dialog-create-survey'].open()
     },
     async handleSurveyEnableChange(index, row) {
       let { survey_id, survey_enable } = row
@@ -125,7 +127,8 @@ export default {
     }
   },
   components: {
-    DialogCreateSurvey
+    DialogCreateSurvey,
+    DialogDetailSurvey
   }
 }
 </script>
