@@ -7,7 +7,7 @@
         el-table-column(label='问卷名称', prop='survey_title')
           template(slot-scope='scope')
             template(v-if='scope.row.survey_title__edit')
-              el-input(placeholder='请输入内容', v-model='scope.row.survey_title__edit_temp', clearable, style='width: 70%; margin-right: .5em')
+              el-input(size='mini', placeholder='请输入内容', v-model='scope.row.survey_title__edit_temp', clearable, autofocus, style='width: 70%; margin-right: .5em')
               el-button(type='text', icon='el-icon-check', @click='handleSurveyTitleChange(scope.$index, scope.row)')
               el-button(type='text', icon='el-icon-close', @click='scope.row.survey_title__edit = false')
             template(v-else)
@@ -64,6 +64,14 @@ export default {
     },
     async handleSurveyTitleChange(index, row) {
       let { survey_id, survey_title__edit_temp } = row
+      if (
+        !(
+          survey_title__edit_temp.length >= 5 &&
+          survey_title__edit_temp.length <= 32
+        )
+      ) {
+        return this.$message.warning('长度在 5 到 32 个字符')
+      }
       try {
         await this.updateSurveyTitle({
           survey_id,
