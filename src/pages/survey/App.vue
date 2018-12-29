@@ -14,7 +14,7 @@
         el-table-column(label='问卷名称', prop='survey_title')
           template(slot-scope='scope')
             template(v-if='scope.row.survey_title__edit')
-              el-input(size='mini', placeholder='请输入内容', v-model='scope.row.survey_title__edit_temp', clearable, autofocus, style='width: 70%; margin-right: .5em')
+              el-input(size='mini', placeholder='请输入内容', v-model='scope.row.survey_title__edit_temp', autofocus, style='width: 70%; margin-right: .5em')
               el-button(type='text', icon='el-icon-check', @click='handleSurveyTitleChange(scope.$index, scope.row)')
               el-button(type='text', icon='el-icon-close', @click='scope.row.survey_title__edit = false')
             template(v-else)
