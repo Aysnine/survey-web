@@ -9,6 +9,7 @@ if (process.env.VUE_APP_MOCK == 'on') {
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.styl'
 
+import '@/components/auto'
 import '@/plugin'
 
 import ElementUI from 'element-ui'
