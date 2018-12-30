@@ -48,7 +48,7 @@ function render(method, status, url, other) {
 }
 
 export default function(req, res) {
-  if (process.env.VUE_APP_SAOLOG !== 'off') return;
+  if (process.env.VUE_APP_SAOLOG === 'off') return;
   console.groupCollapsed(
     ...render(
       res.config.method.toUpperCase(),
