@@ -138,8 +138,13 @@ export default {
       },
       rules: {
         survey_title: [
-          { required: true, message: '请输入问卷名称', trigger: 'blur' },
-          { min: 5, max: 32, message: '长度在 5 到 32 个字符', trigger: 'blur' }
+          { required: true, message: '请输入问卷名称', trigger: 'change' },
+          {
+            min: 5,
+            max: 32,
+            message: '长度在 5 到 32 个字符',
+            trigger: 'change'
+          }
         ]
       },
       counter: 1,
