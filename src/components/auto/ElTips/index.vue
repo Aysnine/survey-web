@@ -1,6 +1,6 @@
 <template lang="pug">
   .el--tips(:style='{textAlign: align}')
-    p
+    p(style='word-break: break-all')
       slot
 </template>
 

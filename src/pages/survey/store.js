@@ -5,6 +5,7 @@ import {
   createSurvey,
   updateSurveyEnable,
   updateSurveyTitle,
+  updateSurveyTips,
   deleteSurvey
 } from '@/api/survey'
 
@@ -19,6 +20,8 @@ export default new Vuex.Store({
       v.map(i => {
         i.survey_title__edit_temp = ''
         i.survey_title__edit = false
+        i.survey_tips__edit_temp = ''
+        i.survey_tips__edit = false
       })
       state.survey = v
     }
@@ -60,6 +63,14 @@ export default new Vuex.Store({
     async updateSurveyTitle(_, form) {
       try {
         let rst = await updateSurveyTitle(form)
+        return rst
+      } catch (error) {
+        throw error
+      }
+    },
+    async updateSurveyTips(_, form) {
+      try {
+        let rst = await updateSurveyTips(form)
         return rst
       } catch (error) {
         throw error

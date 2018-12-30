@@ -19,7 +19,7 @@ export default [
     path: /createSurvey.*/,
     method: 'post',
     handle({ db, body, uid, date }) {
-      let { survey_title, survey_enable, survey_doc } = body
+      let { survey_title, survey_enable, survey_doc, survey_tips } = body
       return {
         code: 0,
         msg: '添加成功',
@@ -30,6 +30,7 @@ export default [
             survey_title,
             survey_enable,
             survey_doc,
+            survey_tips,
             survey_create_datetime: date().format('YYYY-MM-DD HH:mm:ss')
           })
           .write().survey_id
@@ -64,6 +65,22 @@ export default [
           .get('survey')
           .find({ survey_id })
           .assign({ survey_title })
+          .write().survey_id
+      }
+    }
+  },
+  {
+    path: /updateSurveyTips.*/,
+    method: 'post',
+    handle({ db, body }) {
+      let { survey_id, survey_tips } = body
+      return {
+        code: 0,
+        msg: '设置成功',
+        data: db
+          .get('survey')
+          .find({ survey_id })
+          .assign({ survey_tips })
           .write().survey_id
       }
     }

@@ -4,6 +4,8 @@
       el-form.hero-wrap(:model='form', :rules='rules', ref='form', label-suffix='：', label-width='140px')
         el-form-item(label='问卷名称', prop='survey_title')
           el-input(v-model='form.survey_title', placeholder='请输入问卷名称', clearable, autofocus)
+        el-form-item(label='问卷说明', prop='survey_tips')
+          el-input(v-model='form.survey_tips', placeholder='请输入问卷说明', autosize, type='textarea')
         el-form-item(label='问卷状态', prop='survey_enable')
           el-switch(v-model='form.survey_enable', :active-value='1', :inactive-value='0', active-text='可以填写', inactive-text='不可填写')
         .survey-inner-list
@@ -132,6 +134,7 @@ export default {
       form: {
         survey_title: '',
         survey_enable: 1,
+        survey_tips: '',
         survey_doc: {
           questions: []
         }
@@ -143,6 +146,13 @@ export default {
             min: 5,
             max: 32,
             message: '长度在 5 到 32 个字符',
+            trigger: 'change'
+          }
+        ],
+        survey_tips: [
+          {
+            max: 1000,
+            message: '一千字以内',
             trigger: 'change'
           }
         ]

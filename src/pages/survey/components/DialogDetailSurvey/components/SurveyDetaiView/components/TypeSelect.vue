@@ -1,10 +1,10 @@
 <template lang="pug">
-  el-card.card(shadow='never')
+  el-card.card(shadow='hover')
     .header(slot='header')
       //- span.index # {{ index + 1 }}
       //- span.title {{ qs.title }}
       //- el-alert(v-if='qs.tips', :title='qs.tips', type='info', show-icon, :closable='false')
-      el-alert(:title='"#" + (index+1) + " " + qs.title', type='success', :description='qs.tips ? qs.tips : " "', :closable='false', style='padding: .5em; padding-top: 1em')
+      el-alert(:title='"#" + (index+1) + " " + qs.title', type='info', :description='qs.tips ? qs.tips : " "', :closable='false', style='padding: .5em; padding-top: 1em')
     el-radio-group.vertical-list(v-if='qs.method == "radio"', v-model='radio', style='width: 100%')
       el-radio.hovered(v-for='(option, optionIndex) in qs.options', :key='option.index', :label='option.index')
         span.fix--top {{ option.value }}

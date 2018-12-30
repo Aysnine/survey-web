@@ -7,14 +7,13 @@ export function fetchSurveyList() {
   })
 }
 
-export function createSurvey({ survey_title, survey_doc, survey_enable }) {
+export function createSurvey(form) {
   return request({
     method: 'post',
     url: 'createSurvey',
     data: {
-      survey_title,
-      survey_enable,
-      survey_doc: JSON.stringify(survey_doc)
+      ...form,
+      survey_doc: JSON.stringify(form.survey_doc)
     }
   })
 }
@@ -37,6 +36,17 @@ export function updateSurveyTitle({ survey_id, survey_title }) {
     data: {
       survey_id,
       survey_title
+    }
+  })
+}
+
+export function updateSurveyTips({ survey_id, survey_tips }) {
+  return request({
+    method: 'post',
+    url: 'updateSurveyTips',
+    data: {
+      survey_id,
+      survey_tips
     }
   })
 }

@@ -25,12 +25,32 @@
                 el-button(type='text', icon='el-icon-check', @click='handleSurveyTitleChange(scope.$index, scope.row)')
                 el-button(type='text', icon='el-icon-close', @click='scope.row.survey_title__edit = false')
               template(v-else)
-                span(style='margin-right: .5em') {{ scope.row.survey_title }}
+                el-tooltip(v-if='scope.row.survey_tips', effect='light', :content='scope.row.survey_tips', placement='bottom-start')
+                  span(style='margin-right: .5em') {{ scope.row.survey_title }}
+                span(v-else, style='margin-right: .5em') {{ scope.row.survey_title }}
                 el-button(type='text', icon='el-icon-edit', @click='scope.row.survey_title__edit = true, scope.row.survey_title__edit_temp = scope.row.survey_title')
-          el-table-column(label='问卷状态', prop='survey_enable', width='80')
+          el-table-column(label='问卷状态', prop='survey_enable', width='100')
             template(slot-scope='scope')
               el-switch(v-model='scope.row.survey_enable', :inactive-value='0', :active-value='1', @change='handleSurveyEnableChange(scope.$index, scope.row)')
           el-table-column(label='创建时间', prop='survey_create_datetime', width='160')
+          el-table-column(type='expand', width='100')
+            template(slot='header', slot-scope='scope')
+              el-button(type='text', @click='handleRowExpansionOpenAll') 展开
+              el-button(type='text', @click='handleRowExpansionCloseAll') 收起
+            template(slot-scope='scope')
+              .expand-wrap
+                el-row(:gutter='20')
+                  el-col(:span='6', style='text-align: right;')
+                    span(style='line-height: 32px') 问卷说明：
+                  el-col(:span='12')
+                    template(v-if='scope.row.survey_tips__edit')
+                      el-input(type='textarea', size='mini', placeholder='请输入内容', v-model='scope.row.survey_tips__edit_temp', autosize, style='margin-right: .5em')
+                      div(style='text-align: right')
+                        el-button(type='text', icon='el-icon-check', @click='handleSurveyTipsChange(scope.$index, scope.row)')
+                        el-button(type='text', icon='el-icon-close', @click='scope.row.survey_tips__edit = false')
+                    template(v-else)
+                      span.wb-all(style='margin-right: .5em') {{ scope.row.survey_tips }}
+                      el-button.tite-text-button(type='text', icon='el-icon-edit', @click='scope.row.survey_tips__edit = true, scope.row.survey_tips__edit_temp = scope.row.survey_tips')
           el-table-column(align='right', width='200')
             //- template(slot='header', slot-scope='scope')
             //-   el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建
@@ -63,6 +83,7 @@ export default {
       'fetch',
       'updateSurveyEnable',
       'updateSurveyTitle',
+      'updateSurveyTips',
       'deleteSurvey'
     ]),
     handleSelectionChange(val) {
@@ -103,6 +124,16 @@ export default {
     handleSelectionCancel() {
       this.$refs.table.clearSelection()
     },
+    handleRowExpansionOpenAll() {
+      this.survey.map(row => {
+        this.$refs.table.toggleRowExpansion(row, true)
+      })
+    },
+    handleRowExpansionCloseAll() {
+      this.survey.map(row => {
+        this.$refs.table.toggleRowExpansion(row, false)
+      })
+    },
     async handleSurveyEnableChange(index, row) {
       let { survey_id, survey_enable } = row
       try {
@@ -134,6 +165,22 @@ export default {
       } catch (error) {
         this.$message.error(error.msg)
       }
+    },
+    async handleSurveyTipsChange(index, row) {
+      let { survey_id, survey_tips__edit_temp } = row
+      if (!(survey_tips__edit_temp.length <= 1000)) {
+        return this.$message.warning('1000 字以内！')
+      }
+      try {
+        await this.updateSurveyTips({
+          survey_id,
+          survey_tips: survey_tips__edit_temp
+        })
+        row.survey_tips__edit = false
+        row.survey_tips = survey_tips__edit_temp
+      } catch (error) {
+        this.$message.error(error.msg)
+      }
     }
   },
   components: {
@@ -153,4 +200,11 @@ export default {
     padding 10px
   .header
     border-bottom 1px solid #ebeef5
+  // .expand-wrap
+  //   border 1px solid #ebeef5
+  //   border-radius 3px
+  //   padding .5em
+  .tite-text-button
+    padding-top 0
+    padding-bottom 0
 </style>

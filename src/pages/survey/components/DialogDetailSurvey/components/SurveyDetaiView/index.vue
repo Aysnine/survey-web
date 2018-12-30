@@ -1,6 +1,7 @@
 <template lang="pug">
   .wrap
-    h1 {{ data.survey_title }}
+    h2 {{ data.survey_title }}
+    el-tips(v-if='data.survey_tips') {{ data.survey_tips }}
     template(v-if='qss.length')
       template(v-for='(item, index) in qss')
         template(v-if='item.type === "select"')
@@ -32,7 +33,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-h1
+h2
   text-align center
   font-weight 100
   color #303133
