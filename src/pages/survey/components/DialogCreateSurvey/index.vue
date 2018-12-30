@@ -90,11 +90,12 @@
                       el-button(type='text', @click='item.default = false') 关闭
                 .footer
                   el-row
-                    el-col(:span='3')
+                    //- el-col(:span='3')
+                    el-col(:span='17')
                       div
                         el-checkbox(v-model='item.required') 必填
-                    el-col(:span='14')
-                      el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='关联条件', clearable, style='width: 100%')
+                    //- el-col(:span='14')
+                    //-   el-cascader(:options='qssTree', v-model='item.link', @focus='focusQsIndex = item.index', placeholder='关联条件', clearable, style='width: 100%')
                     el-col(:span='7', style='text-align: right')
                       el-tooltip.item(effect='light', content='删除', placement='bottom-end')
                         el-button(type='danger', icon='el-icon-delete', circle, plain, @click='handleRemoveQuestion(index, item)')
