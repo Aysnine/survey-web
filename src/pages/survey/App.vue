@@ -15,7 +15,7 @@
             el-col(:span='24')
               el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建问卷
       .content
-        el-table(ref='table', :data='survey', style='width: 100%', size='mini', @selection-change='handleSelectionChange', height='calc(100vh - 120px)')
+        el-table(ref='table', :data='survey', style='width: 100%', size='normal', @selection-change='handleSelectionChange', height='calc(100vh - 90px)')
           el-table-column(type='selection', width='40')
           el-table-column(label='#', type='index')
           el-table-column(label='问卷名称', prop='survey_title')
@@ -42,15 +42,17 @@
                 el-row(:gutter='20')
                   el-col(:span='6', style='text-align: right;')
                     span(style='line-height: 32px') 问卷说明：
-                  el-col(:span='12')
+                  el-col(:span='14')
                     template(v-if='scope.row.survey_tips__edit')
-                      el-input(type='textarea', size='mini', placeholder='请输入内容', v-model='scope.row.survey_tips__edit_temp', autosize, style='margin-right: .5em')
-                      div(style='text-align: right')
-                        el-button(type='text', icon='el-icon-check', @click='handleSurveyTipsChange(scope.$index, scope.row)')
-                        el-button(type='text', icon='el-icon-close', @click='scope.row.survey_tips__edit = false')
+                      el-input(type='textarea', size='mini', placeholder='请输入内容', v-model='scope.row.survey_tips__edit_temp', autosize)
                     template(v-else)
-                      span.wb-all(style='margin-right: .5em') {{ scope.row.survey_tips }}
-                      el-button.tite-text-button(type='text', icon='el-icon-edit', @click='scope.row.survey_tips__edit = true, scope.row.survey_tips__edit_temp = scope.row.survey_tips')
+                      span.wb-all(style='display: inline-block; padding-top: 7px') {{ scope.row.survey_tips || "[空]" }}
+                  el-col(:span='4')
+                    template(v-if='scope.row.survey_tips__edit')
+                      el-button(type='text', icon='el-icon-check', @click='handleSurveyTipsChange(scope.$index, scope.row)')
+                      el-button(type='text', icon='el-icon-close', @click='scope.row.survey_tips__edit = false')
+                    template(v-else)
+                      el-button(type='text', icon='el-icon-edit', @click='scope.row.survey_tips__edit = true, scope.row.survey_tips__edit_temp = scope.row.survey_tips')
           el-table-column(align='right', width='200')
             //- template(slot='header', slot-scope='scope')
             //-   el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建
