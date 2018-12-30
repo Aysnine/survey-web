@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-dialog(title='问卷详情', :visible.sync='show', fullscreen, custom-class='tite-dialog')
+  el-dialog(title='问卷详情', :visible.sync='show', fullscreen, custom-class='tite-dialog', :modal='false')
     el-card(shadow='never', style='height: calc(100vh - 80px); overflow-y: scroll;')
       .hero-wrap
         survey-detai-view(v-if='show', :data='survey')

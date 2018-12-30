@@ -1,35 +1,42 @@
 <template lang="pug">
   .page
-    el-card(shadow='never', :body-style='{ padding: "10px" }')
-      div(slot='header')
+    .hero-card
+      .header
         template(v-if='selection.length')
-          el-button(type='danger', plain, @click='handleSelectionDelete') 删除选中
+          el-row
+            el-col(:span='24')
+              el-button-group
+                el-button(type='danger', plain, icon='el-icon-delete', @click='handleSelectionDelete') 删除选中
+                el-button(type='primary', plain, @click='handleSelectionCancel')
+                  | 取消选中
+                  i.el-icon-close.el-icon--right
         template(v-else)
           el-row
-            el-col(:span='24', style='text-align: right')
-              el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建
-      el-table(:data='survey', style='width: 100%', size='mini', @selection-change='handleSelectionChange')
-        el-table-column(type='selection', width='40')
-        el-table-column(label='#', type='index')
-        el-table-column(label='问卷名称', prop='survey_title')
-          template(slot-scope='scope')
-            template(v-if='scope.row.survey_title__edit')
-              el-input(size='mini', placeholder='请输入内容', v-model='scope.row.survey_title__edit_temp', autofocus, style='width: 70%; margin-right: .5em')
-              el-button(type='text', icon='el-icon-check', @click='handleSurveyTitleChange(scope.$index, scope.row)')
-              el-button(type='text', icon='el-icon-close', @click='scope.row.survey_title__edit = false')
-            template(v-else)
-              span(style='margin-right: .5em') {{ scope.row.survey_title }}
-              el-button(type='text', icon='el-icon-edit', @click='scope.row.survey_title__edit = true, scope.row.survey_title__edit_temp = scope.row.survey_title')
-        el-table-column(label='问卷状态', prop='survey_enable')
-          template(slot-scope='scope')
-            el-switch(v-model='scope.row.survey_enable', :inactive-value='0', :active-value='1', @change='handleSurveyEnableChange(scope.$index, scope.row)')
-        el-table-column(label='创建时间', prop='survey_create_datetime')
-        el-table-column(align='right')
-          //- template(slot='header', slot-scope='scope')
-          //-   el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建
-          template(slot-scope='scope')
-            el-button(type='primary', plain, icon='el-icon-tickets', size='mini', @click='handleDetail(scope.$index, scope.row)') 查看
-            el-button.fix--1px(type='danger', plain, icon='el-icon-delete', size='mini', @click='handleDelete(scope.$index, scope.row)') 删除
+            el-col(:span='24')
+              el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建问卷
+      .content
+        el-table(ref='table', :data='survey', style='width: 100%', size='mini', @selection-change='handleSelectionChange', height='calc(100vh - 120px)')
+          el-table-column(type='selection', width='40')
+          el-table-column(label='#', type='index')
+          el-table-column(label='问卷名称', prop='survey_title')
+            template(slot-scope='scope')
+              template(v-if='scope.row.survey_title__edit')
+                el-input(size='mini', placeholder='请输入内容', v-model='scope.row.survey_title__edit_temp', autofocus, style='width: 70%; margin-right: .5em')
+                el-button(type='text', icon='el-icon-check', @click='handleSurveyTitleChange(scope.$index, scope.row)')
+                el-button(type='text', icon='el-icon-close', @click='scope.row.survey_title__edit = false')
+              template(v-else)
+                span(style='margin-right: .5em') {{ scope.row.survey_title }}
+                el-button(type='text', icon='el-icon-edit', @click='scope.row.survey_title__edit = true, scope.row.survey_title__edit_temp = scope.row.survey_title')
+          el-table-column(label='问卷状态', prop='survey_enable', width='80')
+            template(slot-scope='scope')
+              el-switch(v-model='scope.row.survey_enable', :inactive-value='0', :active-value='1', @change='handleSurveyEnableChange(scope.$index, scope.row)')
+          el-table-column(label='创建时间', prop='survey_create_datetime', width='160')
+          el-table-column(align='right', width='200')
+            //- template(slot='header', slot-scope='scope')
+            //-   el-button(type='primary', plain, icon='el-icon-plus', @click='handleCreate') 新建
+            template(slot-scope='scope')
+              el-button(type='primary', plain, icon='el-icon-tickets', size='mini', @click='handleDetail(scope.$index, scope.row)') 查看
+              el-button.fix--1px(type='danger', plain, icon='el-icon-delete', size='mini', @click='handleDelete(scope.$index, scope.row)') 删除
     dialog-create-survey(ref='dialog-create-survey')
     dialog-detail-survey(ref='dialog-detail-survey')
 </template>
@@ -93,6 +100,9 @@ export default {
           // ...
         })
     },
+    handleSelectionCancel() {
+      this.$refs.table.clearSelection()
+    },
     async handleSurveyEnableChange(index, row) {
       let { survey_id, survey_enable } = row
       try {
@@ -132,3 +142,15 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.hero-card
+  position relative
+  margin auto
+  max-width 1024px
+  .header
+  .content
+    padding 10px
+  .header
+    border-bottom 1px solid #ebeef5
+</style>

@@ -1,8 +1,10 @@
 <template lang="pug">
-  el-card.card(shadow='never', :body-style='{ "padding-left": "4em" }')
+  el-card.card(shadow='never')
     .header(slot='header')
-      span.index # {{ index + 1 }}
-      span.title {{ qs.title }}
+      //- span.index # {{ index + 1 }}
+      //- span.title {{ qs.title }}
+      //- el-alert(v-if='qs.tips', :title='qs.tips', type='info', show-icon, :closable='false')
+      el-alert(:title='"#" + (index+1) + " " + qs.title', type='success', :description='qs.tips ? qs.tips : " "', :closable='false', style='padding: .5em; padding-top: 1em')
     el-radio-group.vertical-list(v-if='qs.method == "radio"', v-model='radio', style='width: 100%')
       el-radio.hovered(v-for='(option, optionIndex) in qs.options', :key='option.index', :label='option.index')
         span.fix--top {{ option.value }}
@@ -28,11 +30,8 @@ export default {
 .card
   margin-bottom 1em
   .header
+    margin -20px -20px
     color #303133
-    .index
-      font-weight bold
-    .title
-      margin-left 1em
 .vertical-list
   label
     display block

@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-dialog(title='新建问卷', :visible.sync='show', fullscreen, custom-class='tite-dialog')
+  el-dialog(title='新建问卷', :visible.sync='show', fullscreen, custom-class='tite-dialog', :modal='false')
     el-card(shadow='never', style='height: calc(100vh - 120px); overflow-y: scroll;')
       el-form.hero-wrap(:model='form', :rules='rules', ref='form', label-suffix='：', label-width='140px')
         el-form-item(label='问卷名称', prop='survey_title')
